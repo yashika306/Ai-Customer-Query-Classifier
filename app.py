@@ -14,7 +14,7 @@ load_dotenv()
 
 if not os.environ.get("GROQ_API_KEY"):
     print(
-        "\n WARNING: GROQ_API_KEY is not set. Copy .env.example to .env and "
+        "\n WARNING: GROQ_API_KEY is not set."
         "add your free key from https://console.groq.com/keys before running "
         "real classifications.\n"
     )
