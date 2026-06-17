@@ -22,7 +22,7 @@ Built with production-grade AI guardrails including PII redaction, prompt inject
 🚀 Try the application here: https://ai-customer-query-classifier.onrender.com/
 
 ---
-### Architecture Diagram
+## 🏛️ Architecture Diagram
 
 ![Project Architecture](https://github.com/yashika306/Ai-Customer-Query-Classifier/blob/main/assets/Architecture%20diagram%20-Ticket%20Classifier.png)
 
