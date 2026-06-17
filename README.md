@@ -244,13 +244,14 @@ http://localhost:5000
 
 ---
 
-## Deployment Details
+## ☁️ Deployment Details
 
-- Platform: Render
-- Backend: Flask (Python)
-- AI Provider: Groq LLM API
-- Environment Variables: Managed securely through Render
-- CI/CD: Automatic deployment from GitHub
+- **Platform:** Render
+- **Backend:** Flask (Python)
+- **AI Provider:** Groq LLM API
+- **Environment Variables:** Securely managed through Render
+- **CI/CD:** Automatic deployment from GitHub
+- **Live URL:** https://ai-customer-query-classifier.onrender.com/
 
 ---
 
@@ -275,7 +276,5 @@ Aspiring AI Engineer | Cloud Engineer | Software Developer
 
 - 🔗 GitHub: https://github.com/yashika306
 - 🔗 LinkedIn: https://www.linkedin.com/in/yashikaduthuluru/
-
-Feel free to connect with me to discuss AI, Cloud Computing, Software Engineering, and innovative technology projects.
 
 ---
