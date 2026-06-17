@@ -16,8 +16,11 @@ An AI-powered customer support ticket classification system that securely proces
 
 ---
 
-## 📸 Project Demo
+## 🌐 Live Demo
 
+🚀 Try the application here: https://ai-customer-query-classifier.onrender.com/
+
+---
 ### Architecture Diagram
 
 ![Project Architecture](assets/ticket-classification-architecture.png)
@@ -241,27 +244,13 @@ http://localhost:5000
 
 ---
 
-## 🌐 Deployment
+## Deployment Details
 
-This project can be deployed on:
-
-* Render
-* Railway
-* Azure App Service
-* AWS Elastic Beanstalk
-* Google Cloud Run
-
----
-
-## 📈 Future Enhancements
-
-* Multi-language Classification
-* Sentiment Analysis
-* Retrieval-Augmented Generation (RAG)
-* Agentic AI Workflow
-* Customer Escalation Detection
-* Analytics Dashboard
-* Cloud Monitoring & Logging
+- Platform: Render
+- Backend: Flask (Python)
+- AI Provider: Groq LLM API
+- Environment Variables: Managed securely through Render
+- CI/CD: Automatic deployment from GitHub
 
 ---
 
