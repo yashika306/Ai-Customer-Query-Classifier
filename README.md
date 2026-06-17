@@ -1,6 +1,7 @@
 # 🤖 AI Customer Query Classifier
 
-An AI-powered customer support ticket classification system that securely processes customer queries using Large Language Models (LLMs). The application includes production-grade AI guardrails such as PII redaction, prompt injection detection, JSON validation, fallback handling, and cost tracking.
+*  AI-powered customer support system that automatically classifies customer queries using Large Language Models (LLMs).
+Built with production-grade AI guardrails including PII redaction, prompt injection detection, structured output validation, and cost tracking.
 
 ---
 
@@ -23,7 +24,7 @@ An AI-powered customer support ticket classification system that securely proces
 ---
 ### Architecture Diagram
 
-![Project Architecture](assets/ticket-classification-architecture.png)
+![Project Architecture](https://github.com/yashika306/Ai-Customer-Query-Classifier/blob/main/assets/Architecture%20diagram%20-Ticket%20Classifier.png)
 
 ---
 
