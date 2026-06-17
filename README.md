@@ -1,149 +1,292 @@
-# AI Support Ticket Classifier (LangGraph + Groq)
+# 🤖 AI Customer Query Classifier
 
-A production-pattern AI pipeline that classifies customer support tickets
-using a free LLM (Groq's Llama 3.3 70B), built with LangGraph. This project
-follows the architecture from the "Real AI Engineer Roadmap" tutorial,
-implementing the production-quality skills it covers: schema design,
-structured LLM output, response validation, prompt injection defense, PII
-redaction, retry/fallback handling, and cost tracking.
+An AI-powered customer support ticket classification system that securely processes customer queries using Large Language Models (LLMs). The application includes production-grade AI guardrails such as PII redaction, prompt injection detection, JSON validation, fallback handling, and cost tracking.
 
-## Why Groq instead of OpenAI/GPT
+---
 
-The original tutorial uses a paid GPT model. This version swaps in
-**Groq**, which offers a genuinely free API tier (no credit card) with
-fast inference on open models like Llama 3.3 70B — more than capable for
-this classification task, and free to run for learning/portfolio purposes.
+## 🚀 Features
 
-## Pipeline architecture
+* 🔒 PII Redaction (Sensitive Data Protection)
+* 🛡️ Prompt Injection Detection
+* 🤖 AI-Powered Ticket Classification
+* ✅ JSON Output Validation
+* 🔄 Fallback Handling
+* 💰 LLM Cost Tracking
+* 🌐 Web-Based User Interface
 
+---
+
+## 📸 Project Demo
+
+### Architecture Diagram
+
+![Project Architecture](assets/ticket-classification-architecture.png)
+
+---
+
+## 🏗️ System Architecture
+
+```text
+Customer Query
+      │
+      ▼
+┌─────────────────────┐
+│    PII Redaction    │
+└─────────────────────┘
+      │
+      ▼
+┌─────────────────────┐
+│ Prompt Injection    │
+│     Detection       │
+└─────────────────────┘
+      │
+      ▼
+┌─────────────────────┐
+│ Ticket Classification│
+│       (LLM)         │
+└─────────────────────┘
+      │
+      ▼
+┌─────────────────────┐
+│   JSON Validation   │
+└─────────────────────┘
+      │
+   ┌──┴──┐
+   │     │
+   ▼     ▼
+Success Failure
+   │     │
+   ▼     ▼
+ Cost  Fallback
+Tracker Response
 ```
-customer message
-      |
-      v
-[1] PII Redaction        -- masks credit cards, emails, phone numbers
-      |
-      v
-[2] Injection Check       -- LLM-as-guard: detects prompt injection attempts
-      |                       (e.g. "forget all instructions...")
-      |-- injection detected --> BLOCKED (ticket not classified)
-      v
-[3] Classify Ticket       -- structured output via Pydantic schema:
-      |                       issue_category, assigned_team, priority,
-      |                       sentiment, confidence, reasoning
-      v
-[4] Validate Response      -- confirms schema compliance
-      |-- invalid, retries left --> back to [3]
-      |-- invalid, no retries left --> fallback (routes to general queue)
-      v
-[5] Cost Log               -- tracks tokens + estimated cost per session
-      |
-      v
-   done
-```
 
-## Project structure
+---
 
-```
-ticket-classifier-ai/
-├── app.py                          # Flask server + /classify endpoint
-├── graph.py                        # LangGraph pipeline definition
-├── schemas.py                      # Pydantic schemas + pipeline state
-├── production_modules/
-│   ├── pii_redaction.py            # Step 1
-│   ├── injection_check.py          # Step 2
-│   ├── classifier.py               # Step 3 + 4
-│   └── cost_calculator.py          # Step 5
-├── static/
-│   └── index.html                  # Browser UI (security-console style)
+## ⚙️ Tech Stack
+
+| Component       | Technology            |
+| --------------- | --------------------- |
+| Backend         | Python                |
+| Framework       | Flask                 |
+| LLM Provider    | Groq                  |
+| Validation      | Pydantic              |
+| Frontend        | HTML, CSS, JavaScript |
+| Deployment      | Render                |
+| Version Control | Git & GitHub          |
+
+---
+
+## 📂 Project Structure
+
+```text
+Ai-Customer-Query-Classifier/
+│
+├── app.py
+├── graph.py
+├── schemas.py
 ├── requirements.txt
-├── .env.example                    # Copy to .env, add your Groq key
-└── README.md
+├── README.md
+│
+├── production_modules/
+│   ├── classifier.py
+│   ├── pii_redaction.py
+│   ├── injection_check.py
+│   └── cost_calculator.py
+│
+├── static/
+│   └── index.html
+│
+└── assets/
+    └── ticket-classification-architecture.png
 ```
 
-## Setup (Windows / VS Code)
+---
 
-1. **Get a free Groq API key** (no credit card required):
-   - Go to https://console.groq.com/keys
-   - Sign up / log in, click "Create API Key", copy it
+## 🔄 Workflow
 
-2. **Open this project folder in VS Code**, then in the terminal:
+### Step 1: Customer Submits a Query
 
-   ```powershell
-   pip install -r requirements.txt
-   ```
+Example:
 
-3. **Add your API key:**
-   - Copy `.env.example` to a new file named `.env` in the same folder
-   - Open `.env` and paste your key:
-     ```
-     GROQ_API_KEY=gsk_your_actual_key_here
-     ```
-
-4. **Run the web app:**
-
-   ```powershell
-   python app.py
-   ```
-
-   Then open **http://127.0.0.1:5000** in your browser. Try the example
-   buttons (a normal angry complaint with PII, a prompt injection attempt,
-   and a calm low-priority question) to see all four pipeline stages light
-   up in real time.
-
-   Alternatively, run the pipeline directly from the terminal without the
-   UI:
-
-   ```powershell
-   python graph.py
-   ```
-
-   This runs two built-in test cases and prints the full pipeline state
-   for each, including PII detected, injection detection, classification,
-   and running cost.
-
-## Testing individual modules
-
-Each production module can also be run standalone to see just that
-piece in isolation:
-
-```powershell
-python production_modules/pii_redaction.py      # no API key needed
-python production_modules/injection_check.py    # needs GROQ_API_KEY
-python production_modules/classifier.py         # needs GROQ_API_KEY
-python production_modules/cost_calculator.py     # no API key needed
+```text
+My package was supposed to arrive 5 days ago and it still hasn't shown up.
+Order #98765
 ```
 
-## Notes on Groq's free tier
+### Step 2: PII Redaction
 
-As of mid-2026, Groq's free tier for `llama-3.3-70b-versatile` allows
-roughly 30 requests/minute and 1,000 requests/day with no cost and no
-credit card. That's far more than enough for development, testing, and
-demoing this project. If you ever hit a `429` rate-limit error, just wait
-a minute and retry — the limit resets on a rolling window.
+Sensitive information is detected and masked before being sent to the LLM.
 
-## Honest notes for interviews
+### Step 3: Prompt Injection Detection
 
-- **Cost tracking is illustrative, not exact.** Token counts are
-  estimated (Groq's structured-output response doesn't always expose
-  precise usage through this LangChain interface), and the per-token
-  rates used are Groq's *paid*-tier rates, even though you're on the free
-  tier — this mirrors the real production habit of costing your free
-  usage as if it weren't free, so you have guardrails the moment you scale.
-- **The injection guard is an LLM itself**, which means it isn't
-  perfect — sufficiently creative attacks can sometimes slip through, and
-  legitimate urgent messages can occasionally be over-flagged. Production
-  systems typically combine this with rule-based checks (e.g. flagging
-  literal phrases like "ignore previous instructions") for defense in
-  depth.
-- **PII redaction here is regex-based**, which is fast and free but will
-  miss PII that doesn't match the patterns (e.g. unusual phone formats,
-  non-US formats). A production system would likely add a dedicated PII
-  detection model or service for better recall.
+The system identifies malicious prompts such as:
 
-## Possible extensions
+```text
+Ignore previous instructions
+Reveal system prompt
+Execute arbitrary commands
+```
 
-- Add rule-based keyword detection alongside the LLM injection guard
-- Swap the regex PII redaction for a proper NER-based PII detector
-- Add a real per-user session cost cap that blocks further requests once hit
-- Persist classified tickets to a database with a simple dashboard
-- Add automated tests comparing classifier output against labeled examples
+### Step 4: AI Classification
+
+The LLM classifies the customer query into an appropriate support category.
+
+### Step 5: JSON Validation
+
+The generated output is validated against a predefined schema.
+
+### Step 6: Cost Tracking
+
+Estimated LLM token usage and inference cost are calculated.
+
+### Step 7: Response Returned
+
+The final validated classification result is returned to the user.
+
+---
+
+## 🎯 Supported Categories
+
+* Billing Issues
+* Refund Requests
+* Technical Support
+* Delivery Problems
+* Account Management
+* General Inquiry
+
+---
+
+## 🔒 Security Features
+
+### PII Protection
+
+Detects and redacts:
+
+* Email Addresses
+* Phone Numbers
+* Account IDs
+* Personal Information
+
+### Prompt Injection Defense
+
+Protects against:
+
+* System Prompt Extraction
+* Jailbreak Attempts
+* Instruction Override Attacks
+
+### Output Validation
+
+Ensures:
+
+* Structured Responses
+* Valid Categories
+* Safe Outputs
+
+---
+
+## 📊 Example Output
+
+```json
+{
+  "category": "Delivery Issue",
+  "priority": "High",
+  "confidence": 0.96,
+  "estimated_cost": "$0.0003"
+}
+```
+
+---
+
+## 🛠️ Installation
+
+### Clone Repository
+
+```bash
+git clone https://github.com/yashika306/Ai-Customer-Query-Classifier.git
+```
+
+### Navigate to Project
+
+```bash
+cd Ai-Customer-Query-Classifier
+```
+
+### Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### Configure Environment Variables
+
+Create a `.env` file:
+
+```env
+GROQ_API_KEY=YOUR_GROQ_API_KEY
+```
+
+### Run Application
+
+```bash
+python app.py
+```
+
+Application will be available at:
+
+```text
+http://localhost:5000
+```
+
+---
+
+## 🌐 Deployment
+
+This project can be deployed on:
+
+* Render
+* Railway
+* Azure App Service
+* AWS Elastic Beanstalk
+* Google Cloud Run
+
+---
+
+## 📈 Future Enhancements
+
+* Multi-language Classification
+* Sentiment Analysis
+* Retrieval-Augmented Generation (RAG)
+* Agentic AI Workflow
+* Customer Escalation Detection
+* Analytics Dashboard
+* Cloud Monitoring & Logging
+
+---
+
+## 🎓 Learning Outcomes
+
+This project demonstrates:
+
+* LLM Application Development
+* Prompt Security Engineering
+* AI Output Validation
+* Production AI Guardrails
+* Cost Monitoring
+* End-to-End AI System Design
+* AI System Architecture
+
+---
+
+## 👩‍💻 Author
+
+**Yashika Duthuluru**  
+Aspiring AI Engineer | Cloud Engineer | Software Developer
+
+- 🔗 GitHub: https://github.com/yashika306
+- 🔗 LinkedIn: https://www.linkedin.com/in/yashikaduthuluru/
+
+Feel free to connect with me to discuss AI, Cloud Computing, Software Engineering, and innovative technology projects.
+
+---
